@@ -8,14 +8,18 @@ from .views import (
     ProductViewSet,
     SolutionViewSet,
     DocumentViewSet,
+    AboutUsViewSet,
+    ServicesViewSet
 )
 
 router = DefaultRouter()
-router.register(r'sliders', SliderViewSet)
-router.register(r'categories', CategoryViewSet)
-router.register(r'products', ProductViewSet)
-router.register(r'solutions', SolutionViewSet)
-router.register(r'documents', DocumentViewSet)
+router.register(r'sliders', SliderViewSet, basename="sliders")
+router.register(r'categories', CategoryViewSet, basename="categories")
+router.register(r'products', ProductViewSet, basename="products")
+router.register(r'solutions', SolutionViewSet, basename="solutions")
+router.register(r'documents', DocumentViewSet, basename="documents")
+router.register(r'about-us', AboutUsViewSet, basename="about-us")
+router.register(r'our-Services', ServicesViewSet, basename="our-Services")
 
 urlpatterns = [
     path('', include(router.urls)),
