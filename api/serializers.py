@@ -17,9 +17,14 @@ class ProductFileSerializer(serializers.ModelSerializer):
         model = ProductFile
         fields = '__all__'
 
+class RelatedProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'name_en', 'name_ar',,'description_en','description_ar'  'image']
+
 class ProductSerializer(serializers.ModelSerializer):
     files = ProductFileSerializer(many=True, read_only=True)
-    related_products = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    related_products = RelatedProductSerializer(many=True, read_only=True)
     category = CategorySerializer(read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), source='category', write_only=True
