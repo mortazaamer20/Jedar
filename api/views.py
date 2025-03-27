@@ -58,12 +58,20 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         minimal = request.query_params.get('minimal') == 'true'
         products = self.get_queryset()
 
-        grouped_data = defaultdict(list)
+        grouped_data = defaultdict(lambda: {"category": None, "products": []})
         for product in products:
-            category_name = {
+            category_key = product.category.id if product.category else "uncategorized"
+            category_info = {
                 "name_en": product.category.name_en if product.category else "Uncategorized",
-                "name_ar": product.category.name_ar if product.category else "غير مصنف"  
+                "name_ar": product.category.name_ar if product.category else "غير مصنف"
             }
+            if category_key not in grouped_data:
+                grouped_data[category_key] = {
+                    "category": category_info,
+                    "products": []
+                }
+
+
             product_data = {
                 "id": product.id,
                 "name_en": product.name_en,
@@ -73,9 +81,9 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
                 "image": product.image.url if product.image else None,
             } if minimal else ProductSerializer(product).data
 
-            grouped_data[tuple(category_name.items())].append(product_data)
+            grouped_data[category_key]["products"].append(product_data)
 
-        return Response(grouped_data)
+        return Response(list(grouped_data.values()))
 
 
 class ServicesViewSet(viewsets.ReadOnlyModelViewSet):
