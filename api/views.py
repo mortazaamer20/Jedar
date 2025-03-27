@@ -60,7 +60,10 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
         grouped_data = defaultdict(list)
         for product in products:
-            category_name = product.category.name_en if product.category else "Uncategorized"
+            category_name = {
+                "name_en": product.category.name_en if product.category else "Uncategorized",
+                "name_ar": product.category.name_ar if product.category else "غير مصنف"  
+            }
             product_data = {
                 "id": product.id,
                 "name_en": product.name_en,
@@ -70,7 +73,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
                 "image": product.image.url if product.image else None,
             } if minimal else ProductSerializer(product).data
 
-            grouped_data[category_name].append(product_data)
+            grouped_data[tuple(category_name.items())].append(product_data)
 
         return Response(grouped_data)
 
