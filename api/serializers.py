@@ -20,7 +20,7 @@ class ProductFileSerializer(serializers.ModelSerializer):
 class RelatedProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name_en', 'name_ar',,'description_en','description_ar'  'image']
+        fields = ['id', 'name_en', 'name_ar','description_en','description_ar' ,'image']
 
 class ProductSerializer(serializers.ModelSerializer):
     files = ProductFileSerializer(many=True, read_only=True)
